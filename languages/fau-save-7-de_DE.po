@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FAU Save 7 v1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-21 10:11:55+0000\n"
+"PO-Revision-Date: 2015-02-04 11:26:31+0000\n"
 "Last-Translator: zo95zofo <barbara.bothe@fau.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,17 +26,17 @@ msgstr ""
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: fau-save-7.php:188
+#: fau-save-7.php:199
 #@ fau-save-7
 msgid "Save Form Data"
 msgstr "Formulareingaben speichern"
 
-#: fau-save-7.php:194
+#: fau-save-7.php:205
 #@ fau-save-7
 msgid "Form ID"
 msgstr "Formular-ID"
 
-#: fau-save-7.php:197
+#: fau-save-7.php:208
 #@ fau-save-7
 msgid "File Name"
 msgstr "Dateiname"
@@ -54,6 +54,7 @@ msgid "Your Wordpresss version %s is deprecated. Please update at least to versi
 msgstr "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die Wordpress-Version %s."
 
 #: fau-save-7.php:87
+#: fau-save-7.php:163
 #, php-format
 #@ fau-save-7
 msgid "This plugin requires %sContact Form 7%s plugin. Please install and activate Contact Form 7 first."
@@ -63,4 +64,19 @@ msgstr "Dieses Plugin benötigt das %sContact Form 7%s-Plugin. Bitte installiere
 #@ fau-save-7
 msgid "Plugin Activation Error"
 msgstr "Fehler bei der Plugin-Aktivierung"
+
+#: fau-save-7.php:244
+#@ fau-save-7
+msgid "Please enter the Contact Form 7 form ID."
+msgstr "Bitte geben Sie die ID Ihres Contact-Form-7-Formulars ein."
+
+#: fau-save-7.php:257
+#@ fau-save-7
+msgid "You can download the CSV file at: "
+msgstr "Sie k&ouml;nnen die CSV-Datei unter folgendem Link herunterladen: "
+
+#: fau-save-7.php:166
+#@ fau-save-7
+msgid "Go to Plugin Page"
+msgstr "Zur Plugin-Seite"
 

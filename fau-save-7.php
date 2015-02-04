@@ -23,6 +23,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+load_plugin_textdomain('fau-save-7', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
 add_action('plugins_loaded', array('FAU_Save_7', 'instance'));
 
 register_activation_hook(__FILE__, array('FAU_Save_7', 'activate'));
@@ -39,7 +41,7 @@ class FAU_Save_7 {
 	const version = '1.1';
 	const option_name = '_fs7';
 	const version_option_name = '_fs7_version';
-	const textdomain = 'fs7';
+	const textdomain = 'fau-save-7';
 	const php_version = '5.3'; // Minimal erforderliche PHP-Version
 	const wp_version = '3.9.2'; // Minimal erforderliche WordPress-Version
 
@@ -57,7 +59,6 @@ class FAU_Save_7 {
 	}
 
 	private function init() {
-		load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
 		add_action('admin_init', array(__CLASS__, 'admin_init'));
 		add_action('admin_menu', array(__CLASS__, 'add_options_page'));
 		add_action('wpcf7_before_send_mail', array(__CLASS__, 'wpcf7_write_csv'));
@@ -133,7 +134,7 @@ class FAU_Save_7 {
 		$options = array(
 			'fs7_aktiv' => 1,
 			'fs7_id' => '0000',
-			'fs7_filename' => 'emil'
+			'fs7_filename' => 'n72t27ks'
 		);
 		return $options;
 	}
@@ -157,12 +158,23 @@ class FAU_Save_7 {
 		<?php screen_icon(); ?>
 			<h2><?php echo __('Settings', self::textdomain) . ' &rsaquo; FAU Save 7'; ?></h2>
 
+			<?php
+			// Check if Contact Form 7 is installed
+			if (is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) == false) {
+				$error = sprintf(__('This plugin requires %sContact Form 7%s plugin. Please install and activate Contact Form 7 first.', self::textdomain),'<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">','</a>');
+				if (!empty($error)) {
+					echo '<div class="error"><p>' . $error . '</p><p>'
+						. '&rarr; <a href="plugins.php">' . __('Go to Plugin Page', self::textdomain) . '</a></p></div>';
+				}
+				return;
+			} ?>
+
 			<form method="post" action="options.php">
-		<?php
-		settings_fields('fs7_options');
-		do_settings_sections('fs7_options');
-		submit_button();
-		?>
+				<?php
+				settings_fields('fs7_options');
+				do_settings_sections('fs7_options');
+				submit_button();
+				?>
 			</form>
 		</div>
 		<?php
@@ -245,7 +257,7 @@ class FAU_Save_7 {
 			<?php
 			_e('You can download the CSV file at: ', self::textdomain);
 			if (isset($options['fs7_filename']) && strlen($options['fs7_filename']) > 2) {
-				echo '<a href="' . $uploads_dir . '/' . $options['fs7_filename'] . '.csv">';
+				echo '<a href="' . $uploads_dir . $options['fs7_filename'] . '.csv">';
 				echo $uploads_dir . $options['fs7_filename'] . '.csv';
 				echo '</a>';
 			} else {
