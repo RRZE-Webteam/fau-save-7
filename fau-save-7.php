@@ -132,9 +132,15 @@ class FAU_Save_7 {
 	 */
 	private static function default_options() {
 		$options = array(
-			'fs7_aktiv' => 1,
-			'fs7_id' => '0000',
-			'fs7_filename' => 'n72t27ks'
+			'fs7_aktiv_1' => 0,
+			'fs7_id_1' => '0000',
+			'fs7_filename_1' => 'n72t27ks',
+			'fs7_aktiv_2' => 0,
+			'fs7_id_2' => '',
+			'fs7_filename_2' => '',
+			'fs7_aktiv_3' => 0,
+			'fs7_id_3' => '',
+			'fs7_filename_3' => ''
 		);
 		return $options;
 	}
@@ -184,29 +190,113 @@ class FAU_Save_7 {
 	 * Register and add settings
 	 */
 	public static function admin_init() {
+		
 		register_setting(
 				'fs7_options', // Option group
 				self::option_name, // Option name
 				array(__CLASS__, 'sanitize') // Sanitize
 		);
+		// Form Settings 1
 		add_settings_section(
-				'fs7_section', // ID
-				false, // Title
+				'fs7_form1', // ID
+				__('Form 1', self::textdomain), // Title
 				'__return_false', // Callback
 				'fs7_options' // Page
 		);
 		add_settings_field(
-				'fs7_aktiv', // ID
+				'fs7_aktiv_1', // ID
 				__('Save Form Data', self::textdomain), // Title
 				array(__CLASS__, 'fs7_aktiv_callback'), // Callback
 				'fs7_options', // Page
-				'fs7_section' // Section
+				'fs7_form1', // Section
+				array(
+					'name' => 'fs7_aktiv_1')
 		);
 		add_settings_field(
-				'fs7_id', __('Form ID', self::textdomain), array(__CLASS__, 'fs7_id_callback'), 'fs7_options', 'fs7_section'
+				'fs7_id_1',
+				__('Form ID', self::textdomain),
+				array(__CLASS__, 'fs7_id_callback'),
+				'fs7_options',
+				'fs7_form1',
+				array(
+					'name' => 'fs7_id_1')
 		);
 		add_settings_field(
-				'fs7_filename', __('File Name', self::textdomain), array(__CLASS__, 'fs7_filename_callback'), 'fs7_options', 'fs7_section'
+				'fs7_filename_1',
+				__('File Name', self::textdomain),
+				array(__CLASS__, 'fs7_filename_callback'),
+				'fs7_options',
+				'fs7_form1',
+				array(
+					'name' => 'fs7_filename_1')
+		);
+		// Form Settings 2
+		add_settings_section(
+				'fs7_form_2', // ID
+				__('Form 2', self::textdomain), // Title
+				'__return_false', // Callback
+				'fs7_options' // Page
+		);
+		add_settings_field(
+				'fs7_aktiv_2', // ID
+				__('Save Form Data', self::textdomain), // Title
+				array(__CLASS__, 'fs7_aktiv_callback'), // Callback
+				'fs7_options', // Page
+				'fs7_form_2', // Section
+				array(
+					'name' => 'fs7_aktiv_2')
+		);
+		add_settings_field(
+				'fs7_id_2',
+				__('Form ID', self::textdomain),
+				array(__CLASS__, 'fs7_id_callback'),
+				'fs7_options',
+				'fs7_form_2',
+				array(
+					'name' => 'fs7_id_2')
+		);
+		add_settings_field(
+				'fs7_filename_2',
+				__('File Name', self::textdomain),
+				array(__CLASS__, 'fs7_filename_callback'),
+				'fs7_options',
+				'fs7_form_2',
+				array(
+					'name' => 'fs7_filename_2')
+		);
+		// Form Settings 3
+		add_settings_section(
+				'fs7_form_3', // ID
+				__('Form 3', self::textdomain), // Title
+				'__return_false', // Callback
+				'fs7_options' // Page
+		);
+		add_settings_field(
+				'fs7_aktiv_3', // ID
+				__('Save Form Data', self::textdomain), // Title
+				array(__CLASS__, 'fs7_aktiv_callback'), // Callback
+				'fs7_options', // Page
+				'fs7_form_3', //Section
+				array(
+					'name' => 'fs7_aktiv_3')
+		);
+		add_settings_field(
+				'fs7_id_3',
+				__('Form ID', self::textdomain),
+				array(__CLASS__, 'fs7_id_callback'),
+				'fs7_options',
+				'fs7_form_3',
+				array(
+					'name' => 'fs7_id_3')
+		);
+		add_settings_field(
+				'fs7_filename_3',
+				__('File Name', self::textdomain),
+				array(__CLASS__, 'fs7_filename_callback'),
+				'fs7_options',
+				'fs7_form_3',
+				array(
+					'name' => 'fs7_filename_3')
 		);
 	}
 
@@ -215,14 +305,16 @@ class FAU_Save_7 {
 	 */
 	public function sanitize($input) {
 		$new_input = array();
-		if (isset($input['fs7_aktiv'])) {
-			$new_input['fs7_aktiv'] = ( $input['fs7_aktiv'] == 1 ? 1 : 0 );
-		}
-		if (isset($input['fs7_id'])) {
-			$new_input['fs7_id'] = absint($input['fs7_id']);
-		}
-		if (isset($input['fs7_filename'])) {
-			$new_input['fs7_filename'] = sanitize_text_field($input['fs7_filename']);
+		for ($i = 1; $i <= 3; $i++) {
+			if (isset($input['fs7_aktiv_'.$i])) {
+				$new_input['fs7_aktiv_'.$i] = ( $input['fs7_aktiv_'.$i] == 1 ? 1 : 0 );
+			}
+			if (isset($input['fs7_id_'.$i])) {
+				$new_input['fs7_id_'.$i] = absint($input['fs7_id_'.$i]);
+			}
+			if (isset($input['fs7_filename_'.$i])) {
+				$new_input['fs7_filename_'.$i] = sanitize_text_field($input['fs7_filename_'.$i]);
+			}
 		}
 		return $new_input;
 	}
@@ -231,37 +323,41 @@ class FAU_Save_7 {
 	 * Get the settings option array and print its values
 	 */
 	// Checkbox "aktiv"
-	public static function fs7_aktiv_callback() {
+	public static function fs7_aktiv_callback($args) {
 		$options = self::get_options();
+		$name = esc_attr( $args['name'] );
 		?>
-		<input name="<?php printf('%s[fs7_aktiv]', self::option_name); ?>" type='checkbox' value='1' <?php print checked($options['fs7_aktiv'], 1, false); ?> >
+		<input name="<?php printf('%s['.$name.']' , self::option_name); ?>" type='checkbox' value='1' <?php if (array_key_exists($name, $options)) { print checked($options[$name], 1, false); } ?> >
 		<?php
-	}
+		}
+
 	// Textbox "Form ID"
-	public static function fs7_id_callback() {
+	public static function fs7_id_callback($args) {
 		$options = self::get_options();
+		$name = esc_attr( $args['name'] );
 		?>
-		<input name="<?php printf('%s[fs7_id]', self::option_name); ?>" type='text' value="<?php echo $options['fs7_id']; ?>" ><br />
+		<input name="<?php printf('%s['.$name.']', self::option_name); ?>" type='text' value="<?php if (array_key_exists($name, $options)) { echo $options[$name]; } ?>" ><br />
 		<span class="description"><?php _e('Please enter the Contact Form 7 form ID.', self::textdomain) ?></span>
 		<?php
 	}
 	// Textbox "File name"
-	public static function fs7_filename_callback() {
+	public static function fs7_filename_callback($args) {
 		$options = self::get_options();
+		$name = esc_attr( $args['name'] );
 		$uploads = wp_upload_dir();
 		$uploads_dir = trailingslashit($uploads['baseurl']);
 
 		?>
-		<input name="<?php printf('%s[fs7_filename]', self::option_name); ?>" type='text' value="<?php echo $options['fs7_filename']; ?>" >.csv<br />
+		<input name="<?php printf('%s['.$name.']', self::option_name); ?>" type='text' value="<?php if (array_key_exists($name, $options)) { echo $options[$name]; } ?>" >.csv<br />
 		<span class="description">
 			<?php
 			_e('You can download the CSV file at: ', self::textdomain);
-			if (isset($options['fs7_filename']) && strlen($options['fs7_filename']) > 2) {
-				echo '<a href="' . $uploads_dir . $options['fs7_filename'] . '.csv">';
-				echo $uploads_dir . $options['fs7_filename'] . '.csv';
+			if (isset($options[$name]) && strlen($options[$name]) > 2) {
+				echo '<a href="' . $uploads_dir . $options[$name] . '.csv">';
+				echo $uploads_dir . $options[$name] . '.csv';
 				echo '</a>';
 			} else {
-				echo $uploads_dir . '/' . '[your_file_name].csv';
+				echo $uploads_dir . '[your_file_name].csv';
 			}
 	}
 
@@ -271,45 +367,54 @@ class FAU_Save_7 {
 	 */
 	public static function wpcf7_write_csv($wpcf7_data) {
 
-		$options = self::get_options();
-
-		if ((isset($options['fs7_aktiv']) && $options['fs7_aktiv'] == 1 )
-			&& (isset($options['fs7_id']) && $wpcf7_data->id() == $options['fs7_id'])
-			&& (isset($options['fs7_filename']))) {
-
-			require_once(ABSPATH . '/wp-admin/includes/file.php');
-			global $wp_filesystem;
-			/*echo "<pre>";
-			var_dump($options['fs7_id']);
-			var_dump($wpcf7_data->id());
-			echo "</pre>";*/
-			WP_Filesystem();
-			$submission = WPCF7_Submission::get_instance();
-			if ($submission) {
-				$form_fields = $submission->get_posted_data();
-			}
-			$uploads = wp_upload_dir();
-			$uploads_dir = trailingslashit($uploads['basedir']);
-			$file = $uploads_dir . '/' . $options['fs7_filename'] . '.csv';
-			$form_fields = str_replace(array("\r\n", "\r", "\n"), " ", $form_fields);
-			$form_fields = str_replace("\"", "'", $form_fields);
-			$csv_fields = array_slice($form_fields, 4);
-			$csv_line = "\"" . stripslashes(implode("\";\"", $csv_fields)) . "\"" . PHP_EOL;
-
-			if (!file_exists($file)) {
-				if (!$wp_filesystem->put_contents($file, $csv_line, FS_CHMOD_FILE)) {
-					return new WP_Error('writing_error', 'Error when writing file'); //return error object
-				}
-			} else {
-				$csv_old = $wp_filesystem->get_contents($file);
-				$csv_new = $csv_old . $csv_line;
-				if (!$wp_filesystem->put_contents($file, $csv_new, FS_CHMOD_FILE)) {
-					return new WP_Error('writing_error', 'Error when writing file'); //return error object
-				}
-			}
-
-			// If you want to skip mailing the data, you can do it...
-			$wpcf7_data->skip_mail = false;
+		require_once(ABSPATH . '/wp-admin/includes/file.php');
+		global $wp_filesystem;
+		WP_Filesystem();
+		$submission = WPCF7_Submission::get_instance();
+		if ($submission) {
+			$form_fields = $submission->get_posted_data();
+			$form_id = $form_fields['_wpcf7'];
 		}
+
+		$options = self::get_options();
+		$opt_array = array();
+		for ($i = 1; $i <= 3; $i++) {
+			$opt_array[$options['fs7_id_'.$i]]['aktiv'] = $options['fs7_aktiv_'.$i];
+			$opt_array[$options['fs7_id_'.$i]]['filename'] = $options['fs7_filename_'.$i];
+		}
+
+		if (array_key_exists($form_id, $opt_array)) {
+			if ((isset($opt_array[$form_id]['aktiv']) && $opt_array[$form_id]['aktiv'] == 1 )
+			&& (isset($opt_array[$form_id]['filename']))) {
+
+				$uploads = wp_upload_dir();
+				$uploads_dir = trailingslashit($uploads['basedir']);
+				$file = $uploads_dir . '/' . $opt_array[$form_id]['filename'] . '.csv';
+				$form_fields = str_replace(array("\r\n", "\r", "\n"), " ", $form_fields);
+				$form_fields = str_replace("\"", "'", $form_fields);
+				foreach ($form_fields as $k => $v) {
+					if (is_array($v)) {
+						$v_new = implode(' | ', $v);
+						$form_fields[$k] = $v_new;
+					}
+				}
+				$csv_fields = array_slice($form_fields, 5);
+				$csv_line = "\"" . stripslashes(implode("\";\"", $csv_fields)) . "\"" . PHP_EOL;
+
+				if (!file_exists($file)) {
+					if (!$wp_filesystem->put_contents($file, $csv_line, FS_CHMOD_FILE)) {
+						return new WP_Error('writing_error', 'Error when writing file'); //return error object
+					}
+				} else {
+					$csv_old = $wp_filesystem->get_contents($file);
+					$csv_new = $csv_old . $csv_line;
+					if (!$wp_filesystem->put_contents($file, $csv_new, FS_CHMOD_FILE)) {
+						return new WP_Error('writing_error', 'Error when writing file'); //return error object
+					}
+				}
+			}
+		}
+		// If you want to skip mailing the data, you can do it...
+		// $wpcf7_data->skip_mail = false;
 	}
 }
