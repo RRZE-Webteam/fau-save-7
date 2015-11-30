@@ -416,8 +416,11 @@ print '</pre>';*/
 		// Eintrag/Einträge löschen, wenn delete_all oder delete_XYZ im $_POST
 		if (!empty($_POST) && !isset($_POST['download_csv'])) {
 
-			$command = key($_POST);
-			$delete = explode('_', $command)[1];
+			foreach ($_POST as $key => $value) {
+				if (strpos($key, 'delete_') === 0) {
+					$delete = explode('_', $key)[1];
+				}
+			}
 			if (isset($delete) && $delete == 'all') {
 				foreach ($all_options as $key => $value) {
 					if (stristr($key, self::option_name . '_' . $form_id)) {
