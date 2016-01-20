@@ -467,7 +467,7 @@ class FAU_Save_7 {
 
 		echo '<form method="post" action="admin.php?page=fs7_data_'. $form_id .'">';
 		// CSV-Download
-		$json = json_encode($my_options);
+		$json = json_encode($my_options, JSON_HEX_APOS);
 
 		print "<input type='hidden' name='data' value='" . $json . "'>";
 		echo '<input type="submit" value="'.__('Daten als CSV-Datei herunterladen', self::textdomain).'" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
