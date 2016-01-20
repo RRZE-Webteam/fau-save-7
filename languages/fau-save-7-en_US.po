@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FAU Save 7 v2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-11-30 12:39:30+0100\n"
+"PO-Revision-Date: 2016-01-20 12:41:41+0100\n"
 "Last-Translator: zo95zofo <barbara.bothe@fau.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -57,56 +57,56 @@ msgstr "Go to Plugin Page"
 #: fau-save-7.php:257
 #@ fau-save-7
 msgid "Legen Sie hier fest, für welche Ihrer Kontaktformulare die Einträge gespeichert werden sollen."
-msgstr ""
+msgstr "Choose the form(s) that to save the entries."
 
-#: fau-save-7.php:288
+#: fau-save-7.php:282
 #@ fau-save-7
 msgid "Einträge speichern für folgende Formulare:"
 msgstr "Save form entries for these forms:"
 
-#: fau-save-7.php:388
-#: fau-save-7.php:389
-#: fau-save-7.php:458
+#: fau-save-7.php:382
+#: fau-save-7.php:383
+#: fau-save-7.php:455
 #@ fau-save-7
 msgid "Formulardaten"
 msgstr "Form entries"
 
-#: fau-save-7.php:459
+#: fau-save-7.php:456
 #@ fau-save-7
 msgid "ID:"
 msgstr "ID:"
 
-#: fau-save-7.php:460
-#@ default
+#: fau-save-7.php:457
+#@ fau-save-7
 msgid "Titel"
-msgstr ""
+msgstr "Title"
 
-#: fau-save-7.php:466
+#: fau-save-7.php:462
 #@ fau-save-7
 msgid "Für dieses Formular wurden noch keine Daten eingegeben."
 msgstr "No entries availible. This form has not been submitted yet."
 
-#: fau-save-7.php:475
+#: fau-save-7.php:473
 #@ fau-save-7
 msgid "Daten als CSV-Datei herunterladen"
 msgstr "Save entries as CSV file"
 
-#: fau-save-7.php:492
+#: fau-save-7.php:490
 #@ fau-save-7
 msgid "Diesen Eintrag löschen"
 msgstr "Delete this entry"
 
-#: fau-save-7.php:492
+#: fau-save-7.php:490
 #@ fau-save-7
 msgid "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
 msgstr "Are you sure you want to delete this entry?"
 
-#: fau-save-7.php:497
+#: fau-save-7.php:495
 #@ fau-save-7
 msgid "Alle Einträge löschen"
 msgstr "Delete all entries"
 
-#: fau-save-7.php:497
+#: fau-save-7.php:495
 #@ fau-save-7
 msgid "Sind Sie sicher, dass Sie alle Einträge löschen möchten?"
 msgstr "Are you sure you want to delete all entries?"

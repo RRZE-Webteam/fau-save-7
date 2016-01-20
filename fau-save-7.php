@@ -3,7 +3,7 @@
 /*
   Plugin Name: FAU Save 7
   Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 2.0
+  Version: 2.1
   Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
   Author: RRZE-Webteam
   Author URI: http://blogs.fau.de/webworking/
@@ -265,12 +265,6 @@ class FAU_Save_7 {
             </form>
         </div>
         <?php
-
-/*$options = self::get_options();
-print '<pre>';
-var_dump($options);
-print '</pre>';*/
-
     }
 
     /*
@@ -349,7 +343,7 @@ print '</pre>';*/
 		// Zeitpunkt des Absendens erfassen
 		$form_fields['date'] = date('Y-m-d H:i');
 		$form_fields = str_replace(array("\r\n", "\r", "\n"), " ", $form_fields);
-		$form_fields = str_replace("\"", "'", $form_fields);
+		//$form_fields = str_replace("\"", "'", $form_fields);
 		$rand = intval(mt_rand(1,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9)); ;
 
 		foreach ($form_fields as $k => $v) {
@@ -460,9 +454,8 @@ print '</pre>';*/
 		echo '<div class="wrap">';
 		echo '<h2>'.__('Formulardaten', self::textdomain) . ' ' . $form_id . '</h2>';
 		echo '<p>' . __('ID:', self::textdomain). ' <b>' . $form_id . '</b><br/>';
-		echo __('Titel') . ': <b>' . $form_title .'</b></p>';
+		echo __('Titel', self::textdomain) . ': <b>' . $form_title .'</b></p>';
 
-		//var_dump(self::$cf7Forms);
 		// Hinweis, wenn noch keine Daten existieren
 		if (empty($my_options))  {
 			echo '<div id="message" class="error notice below-h2"><p>';
@@ -474,7 +467,9 @@ print '</pre>';*/
 
 		echo '<form method="post" action="admin.php?page=fs7_data_'. $form_id .'">';
 		// CSV-Download
-		echo "<input type='hidden' name='data' value='" . json_encode($my_options, JSON_UNESCAPED_UNICODE, JSON_UNESCAPED_SLASHES) . "'>";
+		$json = json_encode($my_options);
+
+		print "<input type='hidden' name='data' value='" . $json . "'>";
 		echo '<input type="submit" value="'.__('Daten als CSV-Datei herunterladen', self::textdomain).'" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
 
 		// Datentabelle mit Lösch-Buttons
@@ -511,15 +506,24 @@ print '</pre>';*/
 
 		if ( isset($_POST['download_csv']) ) {
 			$data = $_POST['data'];
-			$data = str_replace('\"', '"', $data);
+			$data = str_replace('\\"', '"', $data);
+			$data = str_replace('\\\\', '\\', $data);
 
 			$results = json_decode($data, true);
+
+			if (empty($results)) {
+				$args = array(
+					'back_link' => true
+				);
+				wp_die('CSV-Datei konnte nicht erstellt werden.','CSV-Fehler', $args);
+				return;
+			}
 
 			$fp = fopen("php://output", "w");
 			$file = 'fs7_export';
 			$filename = $file."_".date("Y-m-d_H-i",time());
 			header("Content-type: text/csv");
-			header('Content-Disposition: attachment; filename='. $filename. date("Y-m-d") . ".csv");
+			header('Content-Disposition: attachment; filename='. $filename . ".csv");
 			/*header("Content-disposition: csv" . date("Y-m-d") . ".csv");
 			header("Content-disposition: filename=".$filename.".csv");*/
 			header("Pragma: no-cache");
