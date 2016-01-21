@@ -127,6 +127,8 @@ class FAU_Save_7 {
 
         // Ab hier können weitere Hooks angelegt werden.
 		add_action('wpcf7_before_send_mail', array(__CLASS__, 'wpcf7_write_csv'));
+		add_action('wpcf7_before_send_mail', array(__CLASS__, 'save_file'));
+
 		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array(__CLASS__, 'add_action_links') );
 		add_action('admin_menu', array(__CLASS__, 'register_fs7_submenu_page'), 11);
 
@@ -466,6 +468,7 @@ class FAU_Save_7 {
 
 
 		echo '<form method="post" action="admin.php?page=fs7_data_'. $form_id .'">';
+		//print_r($my_options);
 		// CSV-Download
 		$json = json_encode($my_options, JSON_HEX_APOS);
 
@@ -473,16 +476,31 @@ class FAU_Save_7 {
 		echo '<input type="submit" value="'.__('Daten als CSV-Datei herunterladen', self::textdomain).'" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
 
 		// Datentabelle mit Lösch-Buttons
-		reset($my_options);
-		$first_key = key($my_options);
+
+		// feststellen, welche Felder es gibt (falls unterschiedliche Felder in den einzelnen Einträgen)
+		$entry_keys = array();
+		foreach ($my_options as $entry) {
+			foreach (array_keys($entry) as $value) {
+				if (!in_array($value, $entry_keys)){
+					$entry_keys[] = $value;
+				}
+			}
+		}
+
+		// alle Einträge auf die gleiche Struktur bringen
+		$new_options = self::adjust_keys($my_options, $entry_keys);
+
+		// Keys als Tabellen-Header
+		reset($new_options);
+		$first_key = key($new_options);
 
 		echo '<table id="fs7_formdata_' . $form_id .'" class="wp-list-table widefat striped"><thead><tr>';
-		foreach ($my_options[$first_key] as $key => $value) {
+		foreach ($new_options[$first_key] as $key => $value) {
 			echo '<th>' . $key . '</th>';
 		}
 		echo '<th>&nbsp;</th>';
 		echo '</tr></thead><tbody>';
-		foreach ($my_options as $entry_id => $entry) {
+		foreach ($new_options as $entry_id => $entry) {
 			echo '<tr>';
 			foreach ($entry as $key => $value) {
 				echo '<td>' . $value . '</td>';
@@ -538,4 +556,58 @@ class FAU_Save_7 {
 			exit;
 		}
 	}
+
+	/*
+	 * Datei speichern
+	 */
+
+	public static function save_file($wpcf7_data){
+    /*$random = date(DATE_ATOM, mktime(0, 0, 0, 7, 1, 2000)).rand(0,10000);
+	//$submission = WPCF7_Submission::get_instance();
+
+	var_dump($submission);
+
+    $eventImgClean = "/".$random.str_replace("/home/website/public_html/wp-content/uploads/wpcf7_uploads/","",$cf7->uploaded_files['event-image']);
+    $eventImg = $cf7->uploaded_files['event-image'];
+    if (strlen($eventImg)<1)  {
+      $eventImg = FALSE;
+    }
+    else {
+      //make sure the image is below 1Mbyte
+      if (filesize($eventImg) < 1048576){
+        copy($eventImg, "wp-content/uploads/".$eventImgClean);
+        $evImg = "/wp-content/uploads/".$eventImgClean;
+        $filesize1_ok = TRUE;
+      } else {
+        $filesize1_ok = FALSE;
+      }
+    }
+    //do extra stuff here
+*/
+	}
+
+	/*
+	 * Keys konsolidieren (falls nachträglich Felder ins Formulat hinzugefügt wurden)
+	 */
+
+	private static function adjust_keys($entries, $keys) {
+		foreach ($keys as $key) {
+			$key_array[$key] = '';
+		}
+		foreach ($entries as $key => $entry) {
+			$new_entries[$key] = array_merge($key_array, $entry);
+		}
+		// date ans Ende setzen
+		foreach ($new_entries as &$new_entry) {
+			self::move_to_end($new_entry, 'date');
+		}
+		return $new_entries;
+	}
+
+	private static function move_to_end(&$array, $key) {
+		$tmp = $array[$key];
+		unset($array[$key]);
+		$array[$key] = $tmp;
+	}
+
 }
