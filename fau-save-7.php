@@ -3,7 +3,7 @@
 /*
   Plugin Name: FAU Save 7
   Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 2.1
+  Version: 2.21
   Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
   Author: RRZE-Webteam
   Author URI: http://blogs.fau.de/webworking/
@@ -466,17 +466,6 @@ class FAU_Save_7 {
 			return;
 		}
 
-
-		echo '<form method="post" action="admin.php?page=fs7_data_'. $form_id .'">';
-		//print_r($my_options);
-		// CSV-Download
-		$json = json_encode($my_options, JSON_HEX_APOS);
-
-		print "<input type='hidden' name='data' value='" . $json . "'>";
-		echo '<input type="submit" value="'.__('Daten als CSV-Datei herunterladen', self::textdomain).'" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
-
-		// Datentabelle mit Lösch-Buttons
-
 		// feststellen, welche Felder es gibt (falls unterschiedliche Felder in den einzelnen Einträgen)
 		$entry_keys = array();
 		foreach ($my_options as $entry) {
@@ -490,9 +479,26 @@ class FAU_Save_7 {
 		// alle Einträge auf die gleiche Struktur bringen
 		$new_options = self::adjust_keys($my_options, $entry_keys);
 
-		// Keys als Tabellen-Header
+		// Keys für CSV- und Tabellen-Header
 		reset($new_options);
 		$first_key = key($new_options);
+
+		// Header-Zeile hinzufügen
+		$header_for_csv = array();
+		foreach ($new_options[$first_key] as $key => $value) {
+			$header_for_csv[$key] = $key;
+		}
+		$new_options_with_header = $new_options;
+		array_unshift($new_options_with_header, $header_for_csv);
+
+		$json = json_encode($new_options_with_header, JSON_HEX_APOS);
+
+		// CSV-Download
+		echo '<form method="post" action="admin.php?page=fs7_data_'. $form_id .'">';
+		echo "<input type='hidden' name='data' value='" . $json . "'>";
+		echo '<input type="submit" value="'.__('Daten als CSV-Datei herunterladen', self::textdomain).'" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
+
+		// Datentabelle mit Lösch-Buttons
 
 		echo '<table id="fs7_formdata_' . $form_id .'" class="wp-list-table widefat striped"><thead><tr>';
 		foreach ($new_options[$first_key] as $key => $value) {
@@ -558,7 +564,7 @@ class FAU_Save_7 {
 	}
 
 	/*
-	 * Datei speichern
+	 * Datei speichern ... kommt noch
 	 */
 
 	public static function save_file($wpcf7_data){
@@ -587,8 +593,10 @@ class FAU_Save_7 {
 	}
 
 	/*
-	 * Keys konsolidieren (falls nachträglich Felder ins Formulat hinzugefügt wurden)
+	 * Helferfunktionen
 	 */
+
+	// Keys konsolidieren (falls nachträglich Felder ins Formulat hinzugefügt wurden)
 
 	private static function adjust_keys($entries, $keys) {
 		foreach ($keys as $key) {
@@ -603,6 +611,8 @@ class FAU_Save_7 {
 		}
 		return $new_entries;
 	}
+
+	// Array-Element mit einem bestimmten key ans Ende des Arrays setzen
 
 	private static function move_to_end(&$array, $key) {
 		$tmp = $array[$key];
