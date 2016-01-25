@@ -499,7 +499,6 @@ class FAU_Save_7 {
 		echo '<input type="submit" value="'.__('Daten als CSV-Datei herunterladen', self::textdomain).'" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
 
 		// Datentabelle mit Lösch-Buttons
-
 		echo '<table id="fs7_formdata_' . $form_id .'" class="wp-list-table widefat striped"><thead><tr>';
 		foreach ($new_options[$first_key] as $key => $value) {
 			echo '<th>' . $key . '</th>';
@@ -555,7 +554,7 @@ class FAU_Save_7 {
 			header("Content-Transfer-Encoding: UTF-8");
 
 			foreach($results as $result) {
-				fputcsv($fp, $result);
+				fputcsv($fp, $result, ';', '"');
 			}
 
 			fclose($fp);
@@ -612,12 +611,18 @@ class FAU_Save_7 {
 		return $new_entries;
 	}
 
-	// Array-Element mit einem bestimmten key ans Ende des Arrays setzen
+	// Array-Element mit einem bestimmten key ans Ende/Anfang des Arrays setzen
 
 	private static function move_to_end(&$array, $key) {
 		$tmp = $array[$key];
 		unset($array[$key]);
 		$array[$key] = $tmp;
+	}
+
+	private static function move_to_top(&$array, $key) {
+		$tmp = array($key => $array[$key]);
+		unset($array[$key]);
+		$array = $tmp + $array;
 	}
 
 }
