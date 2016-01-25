@@ -533,6 +533,8 @@ class FAU_Save_7 {
 			$data = str_replace('\\\\', '\\', $data);
 
 			$results = json_decode($data, true);
+			//var_dump($results);
+			//return;
 
 			if (empty($results)) {
 				$args = array(
@@ -554,6 +556,9 @@ class FAU_Save_7 {
 			header("Content-Transfer-Encoding: UTF-8");
 
 			foreach($results as $result) {
+				foreach ($result as $key => $value) {
+					$result[$key] = str_replace("\\\"", "'", $value);
+				}
 				fputcsv($fp, $result, ';', '"');
 			}
 
