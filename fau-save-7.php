@@ -3,7 +3,7 @@
 /*
   Plugin Name: FAU Save 7
   Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 2.21
+  Version: 2.3
   Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
   Author: RRZE-Webteam
   Author URI: http://blogs.fau.de/webworking/
@@ -126,13 +126,12 @@ class FAU_Save_7 {
         /* -- ENDE Optionsseite -- */
 
         // Ab hier können weitere Hooks angelegt werden.
-		add_action('wpcf7_before_send_mail', array(__CLASS__, 'wpcf7_write_csv'));
-		add_action('wpcf7_before_send_mail', array(__CLASS__, 'save_file'));
+		//add_action('wpcf7_mail_sent', array(__CLASS__, 'save_file'));
+		add_action('wpcf7_before_send_mail', array(__CLASS__, 'wpcf7_save_data'));
 
 		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array(__CLASS__, 'add_action_links') );
 		add_action('admin_menu', array(__CLASS__, 'register_fs7_submenu_page'), 11);
 
-		add_action('admin_init', array(__CLASS__, 'fs7_template_redirect'));
 
 		$args = array('post_type' => 'wpcf7_contact_form');
 		self::$cf7Forms = get_posts($args);
@@ -332,38 +331,118 @@ class FAU_Save_7 {
 	/*
 	 *  Daten beim Absenden des Formulars in der Options-Tabelle speichern
 	 */
-	public static function wpcf7_write_csv($wpcf7_data) {
+	public static function wpcf7_save_data() {
 
 		$options = self::get_options();
 
 		$submission = WPCF7_Submission::get_instance();
-		if ($submission) {
-			$form_fields = $submission->get_posted_data();
-			$form_id = $form_fields['_wpcf7'];
+		if (!$submission) {
+			return;
 		}
 
-		// Zeitpunkt des Absendens erfassen
+		$form_fields = $submission->get_posted_data();
+		$form_id = $form_fields['_wpcf7'];
+
+//		print_r($form_fields);
+
+		// Dateien speichern
+
+		$trick_17 = print_r($submission, TRUE);
+		$trick_18 = strstr($trick_17, "uploaded_files");
+		$trick_19 = strstr($trick_18, "Array");
+		$trick_20 = strstr($trick_19, ' )', true) . ' )';
+		$uploaded_files = explode('[', $trick_20);
+		unset($uploaded_files[0]);
+		foreach ($uploaded_files as $key => $array_string) {
+			$uploaded_files[$key] = explode('] => ',$array_string);
+			$new_key = explode('] => ',$array_string)['0'];
+			$new_value = explode('] => ',$array_string)['1'];
+			$new_value = str_replace(')', '', $new_value);
+			$new_value = trim($new_value);
+			$uploaded_files[$new_key] = $new_value;
+			unset($uploaded_files[$key]);
+		}
+
+		$uploaddir = '/proj/websource/docs/RRZEWeb/www.test.rrze.uni-erlangen.de-2175/websource/wp-content/uploads/fs7/';
+		$rand = intval(mt_rand(1,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9)); ;
+
+
+		if (!file_exists($uploaddir)) {
+			mkdir($uploaddir, 0777, true);
+		}
+		if (!file_exists($uploaddir . '.htaccess')) {
+			$f = fopen($uploaddir . ".htaccess", "a+") or die("Error: Can't open file");
+			$content_string = "RewriteEngine On\n"
+					. "Order allow,deny\n"
+					. "Allow from all\n"
+					. "RewriteBase /\n"
+					. "RewriteCond %{REQUEST_FILENAME} ^.*(pdf|m4a|jpg|gif|jpeg|doc|docx|png)$\n"
+					. "RewriteCond %{HTTP_COOKIE} !^.*wordpress_logged_in.*$ [NC]\n"
+					. "RewriteRule . - [R=403,L]\n";
+			fwrite($f, $content_string);
+			fclose($f);
+		}
+
+		print_r($uploaded_files);
+		foreach ($uploaded_files as $key => $file) {
+
+			// breakdown parts of uploaded file, to get basename
+			$path = pathinfo($file);
+
+			// directory of the new file
+			$newfile = $uploaddir . $path['basename'];
+
+			// check if a file with the same name exists in the directory
+			$actual_name = $path['filename'];
+			$original_name = $actual_name;
+			$extension = $path['extension'];
+			$i = 1;
+			while(file_exists($newfile))
+			{
+				$actual_name = (string)$original_name . '_' . $i;
+				$newfile = $uploaddir . $actual_name. "." .$extension;
+				$i++;
+			}
+
+			// make a copy of file to new directory
+			copy($file,$newfile);
+
+			// Name und Pfad als Option speichern
+			add_option( self::option_name . '_' . $form_id . '_' . $rand. '_' . 'file-' . $key, $newfile, '', 'yes' );
+
+		}
+
+
+		// Felder speichern (außer Datei, s.o.)
+
 		$form_fields['date'] = date('Y-m-d H:i');
 		$form_fields = str_replace(array("\r\n", "\r", "\n"), " ", $form_fields);
 		//$form_fields = str_replace("\"", "'", $form_fields);
-		$rand = intval(mt_rand(1,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9)); ;
 
 		foreach ($form_fields as $k => $v) {
 			if (is_array($v)) {
-				$v = implode(' | ', $v);
+				$form_fields[$k] = implode(' | ', $v);
+			}
+
+			if (substr($k,0) != '_wpcf7') {
+				if (!array_key_exists($k, $uploaded_files)) {
+					add_option( self::option_name . '_' . $form_id . '_' . $rand. '_' . $k, $v, '', 'yes' );
+				}
 
 			}
-			if (substr($k,0) != '_wpcf7') {
-				add_option( self::option_name . '_' . $form_id . '_' . $rand. '_' . $k, $v, '', 'yes' );
-			}
+
 		}
+
+
 		// If you want to skip mailing the data, you can do it...
 		//$wpcf7_data->skip_mail = true;
 
 		$all_options = wp_load_alloptions();
 		$my_options = array();
 		foreach( $all_options as $name => $value ) {
-			if(stristr($name, 'fs7')) $my_options[$name] = $value;
+			if(stristr($name, 'fs7')) {
+				$my_options[$name] = $value;
+			}
 		}
 	}
 
@@ -397,6 +476,7 @@ class FAU_Save_7 {
 		$base = $screen->base;
 		$base_parts = explode('_', $base);
 		$form_id = end($base_parts);
+		$my_options = array();
 
 		foreach( $all_options as $name => $value ) {
 			if (stristr($name, self::option_name . '_' . $form_id )) {
@@ -430,7 +510,13 @@ class FAU_Save_7 {
 					}
 				}
 			}
+
 			foreach ($delete_options as $option) {
+				// Datei(en) löschen
+				if (file_exists($all_options[$option]))  {
+					unlink($all_options[$option]);
+				}
+				// Options löschen
 				delete_option($option);
 			}
 		}
@@ -508,7 +594,17 @@ class FAU_Save_7 {
 		foreach ($new_options as $entry_id => $entry) {
 			echo '<tr>';
 			foreach ($entry as $key => $value) {
-				echo '<td>' . $value . '</td>';
+				if (substr($key,0,4) == 'file') {
+					$path = pathinfo($value);
+					$approot = substr($value,strlen($_SERVER['DOCUMENT_ROOT']));
+					if(file_exists($value)) {
+						echo '<td><a href="'.$approot.'">' . $path['basename'] . '<a></td>';
+					} else {
+						echo '<td>' . $path['basename'] . '</td>';
+					}
+				} else {
+					echo '<td>' . $value . '</td>';
+				}
 			}
 			echo '<td><input type="submit" value="X" title="'.__('Diesen Eintrag löschen', self::textdomain).'" class="button button-primary" id="delete_'.$entry_id.'" name="delete_'.$entry_id.'"  onClick="return confirm(\'' . __('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?', self::textdomain) . '\')"></td>';
 			echo '</tr>';
@@ -565,35 +661,6 @@ class FAU_Save_7 {
 			fclose($fp);
 			exit;
 		}
-	}
-
-	/*
-	 * Datei speichern ... kommt noch
-	 */
-
-	public static function save_file($wpcf7_data){
-    /*$random = date(DATE_ATOM, mktime(0, 0, 0, 7, 1, 2000)).rand(0,10000);
-	//$submission = WPCF7_Submission::get_instance();
-
-	var_dump($submission);
-
-    $eventImgClean = "/".$random.str_replace("/home/website/public_html/wp-content/uploads/wpcf7_uploads/","",$cf7->uploaded_files['event-image']);
-    $eventImg = $cf7->uploaded_files['event-image'];
-    if (strlen($eventImg)<1)  {
-      $eventImg = FALSE;
-    }
-    else {
-      //make sure the image is below 1Mbyte
-      if (filesize($eventImg) < 1048576){
-        copy($eventImg, "wp-content/uploads/".$eventImgClean);
-        $evImg = "/wp-content/uploads/".$eventImgClean;
-        $filesize1_ok = TRUE;
-      } else {
-        $filesize1_ok = FALSE;
-      }
-    }
-    //do extra stuff here
-*/
 	}
 
 	/*

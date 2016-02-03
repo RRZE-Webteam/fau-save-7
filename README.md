@@ -4,7 +4,7 @@ fau-save-7
 WordPress-Plugin
 ----------------
 
-Erweiterung des WordPress-Formular-Plugins "Contact Form 7": Speichert Formulareingaben und stellt sie als CSV-Download bereit
+Erweiterung des WordPress-Formular-Plugins "Contact Form 7": Speichert Formulareingaben und per Formular hochgeladene Dateien. Formulareingaben können als CSV-Datei heruntergeladen werden.
 
 ####Funktionsweise
 - Unter "Einstellungen" > "FAU Save 7" wählen Sie, für welche Ihrer Contact-Form-7-Formulare die Eingaben gespeichert werden sollen.
