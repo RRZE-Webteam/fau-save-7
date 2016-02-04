@@ -343,16 +343,15 @@ class FAU_Save_7 {
 		$form_fields = $submission->get_posted_data();
 		$form_id = $form_fields['_wpcf7'];
 
-//		print_r($form_fields);
-
 		// Dateien speichern
 
 		$trick_17 = print_r($submission, TRUE);
-		$trick_18 = strstr($trick_17, "uploaded_files");
-		$trick_19 = strstr($trick_18, "Array");
-		$trick_20 = strstr($trick_19, ' )', true) . ' )';
+		$trick_18 = strstr($trick_17, '[uploaded_files:WPCF7_Submission:private] => Array');
+		$trick_19 = strstr($trick_18, ' )', true) . ' )';
+		$trick_20 = strstr($trick_19, '(');
 		$uploaded_files = explode('[', $trick_20);
 		unset($uploaded_files[0]);
+
 		foreach ($uploaded_files as $key => $array_string) {
 			$uploaded_files[$key] = explode('] => ',$array_string);
 			$new_key = explode('] => ',$array_string)['0'];
@@ -363,8 +362,9 @@ class FAU_Save_7 {
 			unset($uploaded_files[$key]);
 		}
 
-		$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/wp-content/uploads/fs7/';
 		$rand = intval(mt_rand(1,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9)); ;
+
+		$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/wp-content/uploads/fs7/' . $rand . '/';
 
 		if (!file_exists($uploaddir)) {
 			mkdir($uploaddir, 0777, true);
@@ -511,8 +511,17 @@ class FAU_Save_7 {
 
 			foreach ($delete_options as $option) {
 				// Datei(en) löschen
-				if (file_exists($all_options[$option]))  {
-					unlink($all_options[$option]);
+				$file = $all_options[$option];
+				$directory = pathinfo($file)['dirname'];
+
+				if (file_exists($file))  {
+					unlink($file);
+				}
+				if (file_exists($directory . '/.htaccess'))  {
+					unlink($directory . '/.htaccess');
+				}
+				if (is_dir($directory) && (count(scandir($directory)) == 2)) {
+					rmdir($directory);
 				}
 				// Options löschen
 				delete_option($option);
@@ -539,13 +548,13 @@ class FAU_Save_7 {
 		}
 		echo '<div class="wrap">';
 		echo '<h2>'.__('Formulardaten', self::textdomain) . ' ' . $form_id . '</h2>';
-		echo '<p>' . __('ID:', self::textdomain). ' <b>' . $form_id . '</b><br/>';
-		echo __('Titel', self::textdomain) . ': <b>' . $form_title .'</b></p>';
+		echo '<p>' . __('Formular-ID:', self::textdomain). ' <b>' . $form_id . '</b><br/>';
+		echo __('Formular-Titel', self::textdomain) . ': <b>' . $form_title .'</b></p>';
 
 		// Hinweis, wenn noch keine Daten existieren
 		if (empty($my_options))  {
 			echo '<div id="message" class="error notice below-h2"><p>';
-			_e('Für dieses Formular wurden noch keine Daten eingegeben.', self::textdomain);
+			_e('Für dieses Formular liegen keine Einträge vor.', self::textdomain);
 			echo '</p></div>';
 			return;
 		}
@@ -627,8 +636,6 @@ class FAU_Save_7 {
 			$data = str_replace('\\\\', '\\', $data);
 
 			$results = json_decode($data, true);
-			//var_dump($results);
-			//return;
 
 			if (empty($results)) {
 				$args = array(
