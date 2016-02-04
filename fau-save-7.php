@@ -132,6 +132,7 @@ class FAU_Save_7 {
 		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array(__CLASS__, 'add_action_links') );
 		add_action('admin_menu', array(__CLASS__, 'register_fs7_submenu_page'), 11);
 
+		add_action('admin_init', array(__CLASS__, 'fs7_template_redirect'));
 
 		$args = array('post_type' => 'wpcf7_contact_form');
 		self::$cf7Forms = get_posts($args);
@@ -645,6 +646,8 @@ class FAU_Save_7 {
 				return;
 			}
 
+
+
 			$fp = fopen("php://output", "w");
 			$file = 'fs7_export';
 			$filename = $file."_".date("Y-m-d_H-i",time());
@@ -659,6 +662,10 @@ class FAU_Save_7 {
 			foreach($results as $result) {
 				foreach ($result as $key => $value) {
 					$result[$key] = str_replace("\\\"", "'", $value);
+					// bei Dateien nur Dateinamen statt komplettem Pfad verwenden
+					if(file_exists($value)) {
+						$result[$key] = pathinfo($value)['basename'];
+					}
 				}
 				fputcsv($fp, $result, ';', '"');
 			}
