@@ -363,9 +363,8 @@ class FAU_Save_7 {
 			unset($uploaded_files[$key]);
 		}
 
-		$uploaddir = '/proj/websource/docs/RRZEWeb/www.test.rrze.uni-erlangen.de-2175/websource/wp-content/uploads/fs7/';
+		$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/wp-content/uploads/fs7/';
 		$rand = intval(mt_rand(1,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9) . mt_rand(0,9)); ;
-
 
 		if (!file_exists($uploaddir)) {
 			mkdir($uploaddir, 0777, true);
@@ -383,7 +382,6 @@ class FAU_Save_7 {
 			fclose($f);
 		}
 
-		print_r($uploaded_files);
 		foreach ($uploaded_files as $key => $file) {
 
 			// breakdown parts of uploaded file, to get basename
