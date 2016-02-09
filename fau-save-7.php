@@ -368,7 +368,7 @@ class FAU_Save_7 {
 		$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/wp-content/uploads/fs7/' . $rand . '/';
 
 		if (!file_exists($uploaddir)) {
-			mkdir($uploaddir, 0777, true);
+			mkdir($uploaddir, 0755, true);
 		}
 		if (!file_exists($uploaddir . '.htaccess')) {
 			$f = fopen($uploaddir . ".htaccess", "a+") or die("Error: Can't open file");
