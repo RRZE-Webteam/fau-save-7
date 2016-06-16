@@ -2,7 +2,7 @@
 /*
   Plugin Name: FAU Save 7
   Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 2.4
+  Version: 3.0
   Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
   Author: RRZE-Webteam
   Author URI: http://blogs.fau.de/webworking/

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FAU Save 7 v2.4\n"
+"Project-Id-Version: FAU Save 7 v3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: Thu Jun 16 2016 11:09:22 GMT+0200 (CEST)\n"
+"PO-Revision-Date: Thu Jun 16 2016 11:15:01 GMT+0200 (CEST)\n"
 "Last-Translator: Barbara Bothe <barbara.bothe@fau.de>\n"
 "Language-Team: \n"
 "Language: English\n"
@@ -26,6 +26,9 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Loco-Target-Locale: en_US"
 
+msgid "FAU Save 7"
+msgstr "FAU Save 7"
+
 #. URI of the plugin
 msgid "https://github.com/RRZE-Webteam/fau-save-7"
 msgstr "https://github.com/RRZE-Webteam/fau-save-7"
@@ -41,21 +44,6 @@ msgstr "RRZE-Webteam"
 #. Author URI of the plugin
 msgid "http://blogs.fau.de/webworking"
 msgstr "http://blogs.fau.de/webworking"
-
-#: ../fau-save-7.php:566
-msgid "Formular-ID:"
-msgstr "Form ID:"
-
-#: ../fau-save-7.php:567
-msgid "Formular-Titel"
-msgstr "Form Title"
-
-#: ../fau-save-7.php:572
-msgid "Für dieses Formular liegen keine Einträge vor."
-msgstr "No entries found."
-
-msgid "FAU Save 7"
-msgstr "FAU Save 7"
 
 #: ../fau-save-7.php:177
 #, php-format
@@ -107,6 +95,18 @@ msgstr "Save form entries for these forms:"
 #: ../fau-save-7.php:476 ../fau-save-7.php:477 ../fau-save-7.php:565
 msgid "Formulardaten"
 msgstr "Form entries"
+
+#: ../fau-save-7.php:566
+msgid "Formular-ID:"
+msgstr "Form ID:"
+
+#: ../fau-save-7.php:567
+msgid "Formular-Titel"
+msgstr "Form Title"
+
+#: ../fau-save-7.php:572
+msgid "Für dieses Formular liegen keine Einträge vor."
+msgstr "No entries found."
 
 #: ../fau-save-7.php:607
 msgid "Daten als CSV-Datei herunterladen"
