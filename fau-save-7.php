@@ -136,7 +136,7 @@ class FAU_Save_7 {
 
         add_action('admin_init', array(__CLASS__, 'fs7_template_redirect'));
 
-        $args = array('post_type' => 'wpcf7_contact_form');
+        $args = array('post_type' => 'wpcf7_contact_form', 'numberposts' => -1);
         self::$cf7Forms = get_posts($args);
     }
 
