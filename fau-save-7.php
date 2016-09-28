@@ -2,7 +2,7 @@
 /*
   Plugin Name: FAU Save 7
   Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 3.1
+  Version: 3.11
   Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
   Author: RRZE-Webteam
   Author URI: http://blogs.fau.de/webworking/
@@ -428,7 +428,7 @@ class FAU_Save_7 {
 
         // Felder speichern (außer Datei, s.o.)
 
-        $form_fields['date'] = date('Y-m-d H:i');
+        $form_fields['date'] = current_time('Y-m-d H:i');
         $form_fields = str_replace(array("\r\n", "\r", "\n"), " ", $form_fields);
         //$form_fields = str_replace("\"", "'", $form_fields);
 
