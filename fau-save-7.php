@@ -665,7 +665,7 @@ class FAU_Save_7 {
 
             $fp = fopen("php://output", "w");
             $file = 'fs7_export';
-            $filename = $file . "_" . date("Y-m-d_H-i", time());
+            $filename = $file . "_" . date("Y-m-d_H-i", current_time('timestamp'));
             header("Content-type: text/csv");
             header('Content-Disposition: attachment; filename=' . $filename . ".csv");
             /* header("Content-disposition: csv" . date("Y-m-d") . ".csv");
