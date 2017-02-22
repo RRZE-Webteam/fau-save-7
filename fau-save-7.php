@@ -2,7 +2,7 @@
 /*
   Plugin Name: FAU Save 7
   Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 3.11
+  Version: 3.2
   Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
   Author: RRZE-Webteam
   Author URI: http://blogs.fau.de/webworking/
@@ -174,16 +174,16 @@ class FAU_Save_7 {
         $error = '';
 
         if (version_compare(PHP_VERSION, self::php_version, '<')) {
-            $error = sprintf(__('Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die PHP-Version %s.', self::textdomain), PHP_VERSION, self::php_version);
+            $error = sprintf(__('Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die PHP-Version %s.', 'fau-save-7'), PHP_VERSION, self::php_version);
         }
 
         if (version_compare($GLOBALS['wp_version'], self::wp_version, '<')) {
-            $error = sprintf(__('Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die Wordpress-Version %s.', self::textdomain), $GLOBALS['wp_version'], self::wp_version);
+            $error = sprintf(__('Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die Wordpress-Version %s.', 'fau-save-7'), $GLOBALS['wp_version'], self::wp_version);
         }
 
         if (is_plugin_active('contact-form-7/wp-contact-form-7.php') == false) {
-            $error = sprintf(__('Dieses Plugin erfordert das Plugin %sContact Form 7%s. Installieren Sie zuerst Contact Form 7 und aktivieren Sie danach Form Save 7.', self::textdomain), '<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">', '</a>');
-            //$error = sprintf(__('This plugin requires %sContact Form 7%s plugin. Please install and activate Contact Form 7 first.', self::textdomain),'<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">','</a>');
+            $error = sprintf(__('Dieses Plugin erfordert das Plugin %sContact Form 7%s. Installieren Sie zuerst Contact Form 7 und aktivieren Sie danach Form Save 7.', 'fau-save-7'), '<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">', '</a>');
+            //$error = sprintf(__('This plugin requires %sContact Form 7%s plugin. Please install and activate Contact Form 7 first.', 'fau-save-7'),'<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">','</a>');
         }
 
         // Wenn die Überprüfung fehlschlägt, dann wird das Plugin automatisch deaktiviert.
@@ -198,7 +198,7 @@ class FAU_Save_7 {
      */
     public static function add_action_links($links) {
         $mylinks = array(
-            '<a href="' . admin_url('options-general.php?page=options-fs7') . '">' . __('Einstellungen', self::textdomain) . '</a>',
+            '<a href="' . admin_url('options-general.php?page=options-fs7') . '">' . __('Einstellungen', 'fau-save-7') . '</a>',
         );
         return array_merge($links, $mylinks);
     }
@@ -239,7 +239,7 @@ class FAU_Save_7 {
 
     public function admin_settings_page() {
         $this->admin_settings_page = add_options_page(
-                __('FAU Save 7', self::textdomain), __('FAU Save 7', self::textdomain), 'manage_options', 'options-fs7', array($this, 'settings_page'));
+                __('FAU Save 7', 'fau-save-7'), __('FAU Save 7', 'fau-save-7'), 'manage_options', 'options-fs7', array($this, 'settings_page'));
         //add_action('load-' . $this->admin_settings_page, array($this, 'admin_help_menu'));
     }
 
@@ -251,21 +251,21 @@ class FAU_Save_7 {
     public function settings_page() {
         ?>
         <div class="wrap">
-            <h2><?php echo __('Einstellungen &rsaquo; FAU Save 7', self::textdomain); ?></h2>
+            <h2><?php echo __('Einstellungen &rsaquo; FAU Save 7', 'fau-save-7'); ?></h2>
 
             <?php
             // Check if Contact Form 7 is installed
             if (is_plugin_active('contact-form-7/wp-contact-form-7.php') == false) {
-                $error = sprintf(__('Dieses Plugin erfordert das Plugin %sContact Form 7%s. Installieren Sie zuerst Contact Form 7 und aktivieren Sie danach Form Save 7.', self::textdomain), '<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">', '</a>');
+                $error = sprintf(__('Dieses Plugin erfordert das Plugin %sContact Form 7%s. Installieren Sie zuerst Contact Form 7 und aktivieren Sie danach Form Save 7.', 'fau-save-7'), '<a href="https://wordpress.org/plugins/contact-form-7/" target="_blank">', '</a>');
                 if (!empty($error)) {
                     echo '<div class="error"><p>' . $error . '</p><p>'
-                    . '&rarr; <a href="plugins.php">' . __('Zur Plugin-Seite', self::textdomain) . '</a></p></div>';
+                    . '&rarr; <a href="plugins.php">' . __('Zur Plugin-Seite', 'fau-save-7') . '</a></p></div>';
                 }
                 return;
             }
             ?>
 
-            <p><?php _e('Legen Sie hier fest, für welche Ihrer Kontaktformulare die Einträge gespeichert werden sollen.', self::textdomain); ?></p>
+            <p><?php _e('Legen Sie hier fest, für welche Ihrer Kontaktformulare die Einträge gespeichert werden sollen.', 'fau-save-7'); ?></p>
 
             <form method="post" action="options.php">
         <?php
@@ -291,7 +291,7 @@ class FAU_Save_7 {
         );
         add_settings_section(
                 'fs7_form', // ID
-                __('Einträge speichern für folgende Formulare:', self::textdomain), // Title
+                __('Einträge speichern für folgende Formulare:', 'fau-save-7'), // Title
                 '__return_false', // Callback
                 'fs7_options' // Page
         );
@@ -436,13 +436,13 @@ class FAU_Save_7 {
             if (is_array($v)) {
                 $form_fields[$k] = implode(' | ', $v);
             }
-            if (substr($k, 0) != '_wpcf7') {
-                if (!array_key_exists($k, $uploaded_files)) {
-                    if(is_array($v)) {
-                        add_option(self::option_name . '_' . $form_id . '_' . $rand . '_' . $k, $v[0], '', 'yes');
-                    } else {
-                        add_option(self::option_name . '_' . $form_id . '_' . $rand . '_' . $k, $v, '', 'yes');
-                    }
+            if (substr($k, 0) != '_wpcf7' && !array_key_exists($k, $uploaded_files)) {
+
+                if(is_array($v)) {
+                    $input = implode(' | ', $v);
+                    add_option(self::option_name . '_' . $form_id . '_' . $rand . '_' . $k, $input, '', 'yes');
+                } else {
+                    add_option(self::option_name . '_' . $form_id . '_' . $rand . '_' . $k, $v, '', 'yes');
                 }
             }
         }
@@ -473,8 +473,8 @@ class FAU_Save_7 {
             if (isset($fs7_options['fs7_aktiv_' . $id]) && $fs7_options['fs7_aktiv_' . $id] == 1) {
                 add_submenu_page(
                         'wpcf7', // $parent_slug
-                        __('Formulardaten', self::textdomain) . ' ' . $id, // $page_title
-                        __('Formulardaten', self::textdomain) . ' ' . $id, // $menu_title
+                        __('Formulardaten', 'fau-save-7') . ' ' . $id, // $page_title
+                        __('Formulardaten', 'fau-save-7') . ' ' . $id, // $menu_title
                         'manage_options', // $capability
                         'fs7_data_' . $id, // $menu_slug
                         array(__CLASS__, 'fs7_submenu_page_callback') // $function
@@ -562,14 +562,14 @@ class FAU_Save_7 {
             }
         }
         echo '<div class="wrap">';
-        echo '<h2>' . __('Formulardaten', self::textdomain) . ' ' . $form_id . '</h2>';
-        echo '<p>' . __('Formular-ID:', self::textdomain) . ' <b>' . $form_id . '</b><br/>';
-        echo __('Formular-Titel', self::textdomain) . ': <b>' . $form_title . '</b></p>';
+        echo '<h2>' . __('Formulardaten', 'fau-save-7') . ' ' . $form_id . '</h2>';
+        echo '<p>' . __('Formular-ID:', 'fau-save-7') . ' <b>' . $form_id . '</b><br/>';
+        echo __('Formular-Titel', 'fau-save-7') . ': <b>' . $form_title . '</b></p>';
 
         // Hinweis, wenn noch keine Daten existieren
         if (empty($my_options)) {
             echo '<div id="message" class="error notice below-h2"><p>';
-            _e('Für dieses Formular liegen keine Einträge vor.', self::textdomain);
+            _e('Für dieses Formular liegen keine Einträge vor.', 'fau-save-7');
             echo '</p></div>';
             return;
         }
@@ -604,7 +604,7 @@ class FAU_Save_7 {
         // CSV-Download
         echo '<form method="post" action="admin.php?page=fs7_data_' . $form_id . '">';
         echo "<input type='hidden' name='data' value='" . $json . "'>";
-        echo '<input type="submit" value="' . __('Daten als CSV-Datei herunterladen', self::textdomain) . '" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
+        echo '<input type="submit" value="' . __('Daten als CSV-Datei herunterladen', 'fau-save-7') . '" class="button" id="download_csv" name="download_csv" style="margin-bottom: 1em;">';
 
         // Datentabelle mit Lösch-Buttons
         echo '<table id="fs7_formdata_' . $form_id . '" class="wp-list-table widefat striped"><thead><tr>';
@@ -628,12 +628,12 @@ class FAU_Save_7 {
                     print '<td>' . $value . '</td>';
                 }
             }
-            echo '<td><input type="submit" value="X" title="' . __('Diesen Eintrag löschen', self::textdomain) . '" class="button button-primary" id="delete_' . $entry_id . '" name="delete_' . $entry_id . '"  onClick="return confirm(\'' . __('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?', self::textdomain) . '\')"></td>';
+            echo '<td><input type="submit" value="X" title="' . __('Diesen Eintrag löschen', 'fau-save-7') . '" class="button button-primary" id="delete_' . $entry_id . '" name="delete_' . $entry_id . '"  onClick="return confirm(\'' . __('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?', 'fau-save-7') . '\')"></td>';
             echo '</tr>';
         }
         echo '</tbody>';
         echo '</table>';
-        echo '<p class="submit"><input type="submit" value="' . __('Alle Einträge löschen', self::textdomain) . '" class="button button-primary alignright" id="delete_all" name="delete_all" onClick="return confirm(\'' . __('Sind Sie sicher, dass Sie alle Einträge löschen möchten?', self::textdomain) . '\')"></p>';
+        echo '<p class="submit"><input type="submit" value="' . __('Alle Einträge löschen', 'fau-save-7') . '" class="button button-primary alignright" id="delete_all" name="delete_all" onClick="return confirm(\'' . __('Sind Sie sicher, dass Sie alle Einträge löschen möchten?', 'fau-save-7') . '\')"></p>';
 
         echo '</form>';
 
