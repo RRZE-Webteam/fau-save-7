@@ -1,10 +1,9 @@
-# Loco Gettext template
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: FAU Save 7 v3.11\n"
+"Project-Id-Version: FAU Save 7 v3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
+"POT-Creation-Date: 2017-02-22 16:17+0000\n"
 "POT-Revision-Date: Thu Jun 16 2016 11:14:42 GMT+0200 (CEST)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: zo95zofo <barbara.bothe@fau.de>\n"
@@ -28,15 +27,98 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
+#: fau-save-7.php:177
+#, php-format
+msgid ""
+"Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
+"PHP-Version %s."
+msgstr ""
+
+#: fau-save-7.php:181
+#, php-format
+msgid ""
+"Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
+"auf die Wordpress-Version %s."
+msgstr ""
+
+#: fau-save-7.php:185 fau-save-7.php:259
+#, php-format
+msgid ""
+"Dieses Plugin erfordert das Plugin %sContact Form 7%s. Installieren Sie "
+"zuerst Contact Form 7 und aktivieren Sie danach Form Save 7."
+msgstr ""
+
+#: fau-save-7.php:201
+msgid "Einstellungen"
+msgstr ""
+
+#: fau-save-7.php:242 fau-save-7.php:242
 msgid "FAU Save 7"
 msgstr ""
 
-#. URI of the plugin
-msgid "https://github.com/RRZE-Webteam/fau-save-7"
+#: fau-save-7.php:254
+msgid "Einstellungen &rsaquo; FAU Save 7"
+msgstr ""
+
+#: fau-save-7.php:262
+msgid "Zur Plugin-Seite"
+msgstr ""
+
+#: fau-save-7.php:268
+msgid ""
+"Legen Sie hier fest, für welche Ihrer Kontaktformulare die Einträge "
+"gespeichert werden sollen."
+msgstr ""
+
+#. ID
+#: fau-save-7.php:294
+msgid "Einträge speichern für folgende Formulare:"
+msgstr ""
+
+#. $parent_slug
+#. $page_title
+#: fau-save-7.php:476 fau-save-7.php:477 fau-save-7.php:565
+msgid "Formulardaten"
+msgstr ""
+
+#: fau-save-7.php:566
+msgid "Formular-ID:"
+msgstr ""
+
+#: fau-save-7.php:567
+msgid "Formular-Titel"
+msgstr ""
+
+#: fau-save-7.php:572
+msgid "Für dieses Formular liegen keine Einträge vor."
+msgstr ""
+
+#: fau-save-7.php:607
+msgid "Daten als CSV-Datei herunterladen"
+msgstr ""
+
+#: fau-save-7.php:631
+msgid "Diesen Eintrag löschen"
+msgstr ""
+
+#: fau-save-7.php:631
+msgid "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
+msgstr ""
+
+#: fau-save-7.php:636
+msgid "Alle Einträge löschen"
+msgstr ""
+
+#: fau-save-7.php:636
+msgid "Sind Sie sicher, dass Sie alle Einträge löschen möchten?"
 msgstr ""
 
 #. Description of the plugin
 msgid "Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/RRZE-Webteam/fau-save-7"
 msgstr ""
 
 #. Author of the plugin
@@ -44,84 +126,5 @@ msgid "RRZE-Webteam"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "http://blogs.fau.de/webworking"
-msgstr ""
-
-#: ../fau-save-7.php:177
-#, php-format
-msgid ""
-"Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
-"PHP-Version %s."
-msgstr ""
-
-#: ../fau-save-7.php:181
-#, php-format
-msgid ""
-"Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
-"auf die Wordpress-Version %s."
-msgstr ""
-
-#: ../fau-save-7.php:185 ../fau-save-7.php:259
-#, php-format
-msgid ""
-"Dieses Plugin erfordert das Plugin %sContact Form 7%s. Installieren Sie "
-"zuerst Contact Form 7 und aktivieren Sie danach Form Save 7."
-msgstr ""
-
-#: ../fau-save-7.php:201
-msgid "Einstellungen"
-msgstr ""
-
-#: ../fau-save-7.php:254
-msgid "Einstellungen &rsaquo; FAU Save 7"
-msgstr ""
-
-#: ../fau-save-7.php:262
-msgid "Zur Plugin-Seite"
-msgstr ""
-
-#: ../fau-save-7.php:268
-msgid ""
-"Legen Sie hier fest, für welche Ihrer Kontaktformulare die Einträge "
-"gespeichert werden sollen."
-msgstr ""
-
-#: ../fau-save-7.php:294
-msgid "Einträge speichern für folgende Formulare:"
-msgstr ""
-
-#: ../fau-save-7.php:476 ../fau-save-7.php:477 ../fau-save-7.php:565
-msgid "Formulardaten"
-msgstr ""
-
-#: ../fau-save-7.php:566
-msgid "Formular-ID:"
-msgstr ""
-
-#: ../fau-save-7.php:567
-msgid "Formular-Titel"
-msgstr ""
-
-#: ../fau-save-7.php:572
-msgid "Für dieses Formular liegen keine Einträge vor."
-msgstr ""
-
-#: ../fau-save-7.php:607
-msgid "Daten als CSV-Datei herunterladen"
-msgstr ""
-
-#: ../fau-save-7.php:631
-msgid "Diesen Eintrag löschen"
-msgstr ""
-
-#: ../fau-save-7.php:631
-msgid "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
-msgstr ""
-
-#: ../fau-save-7.php:636
-msgid "Alle Einträge löschen"
-msgstr ""
-
-#: ../fau-save-7.php:636
-msgid "Sind Sie sicher, dass Sie alle Einträge löschen möchten?"
+msgid "http://blogs.fau.de/webworking/"
 msgstr ""
