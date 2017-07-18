@@ -1,28 +1,17 @@
 <?php
-/*
-  Plugin Name: FAU Save 7
-  Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
-  Version: 3.2
-  Description: Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export
-  Author: RRZE-Webteam
-  Author URI: http://blogs.fau.de/webworking/
-  Network:
- */
 
-/*
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+/**
+ * Plugin Name:       FAU Save 7
+ * Plugin URI:        https://github.com/RRZE-Webteam/fau-save-7
+ * Description:       Speichert und verwaltet Formulareingaben aus Contact Form 7, CSV-Export.
+ * Version:           3.2.1
+ * Author:            RRZE-Webteam
+ * License:           GNU General Public License v2
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+ * Domain Path:       /languages
+ * Text Domain:       fau-save-7
+ * GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-save-7
+ * GitHub Branch:     master
  */
 
 load_plugin_textdomain('fau-save-7', false, dirname(plugin_basename(__FILE__)) . '/languages');
@@ -287,7 +276,7 @@ class FAU_Save_7 {
         register_setting(
                 'fs7_options', // Option group
                 self::option_name, // Option name
-                array(__CLASS__, 'options_validate') // Sanitize
+                array($this, 'options_validate') // Sanitize
         );
         add_settings_section(
                 'fs7_form', // ID
@@ -475,7 +464,7 @@ class FAU_Save_7 {
                         'wpcf7', // $parent_slug
                         __('Formulardaten', 'fau-save-7') . ' ' . $id, // $page_title
                         __('Formulardaten', 'fau-save-7') . ' ' . $id, // $menu_title
-                        'manage_options', // $capability
+                        'manage_categories', // $capability
                         'fs7_data_' . $id, // $menu_slug
                         array(__CLASS__, 'fs7_submenu_page_callback') // $function
                 );
